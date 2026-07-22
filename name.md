@@ -1,6 +1,6 @@
 # Oblo
 
-**Oblo** is an AI writing companion that helps transform ideas into clear, engaging, and well-structured blog posts.
+**Oblo** is an AI writing companion that helps transform ideas into clear, engaging, and well-structured blog posts and accessible research papers.
 
 The name is a coined word inspired by **blog**, while remaining short, memorable, and approachable. Rather than describing a specific feature, **Oblo** is intended to feel like the name of a trusted assistant—one that helps you brainstorm, organize your thoughts, improve your writing, and refine every draft until it's ready to publish.
 
