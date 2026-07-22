@@ -135,6 +135,7 @@ Currently Oblo writes PoC code and the author executes it. The envisioned next s
 
 ## Open questions
 
+- Voice fine-tuning: enrich `tone-of-voice.md` with recent PowerPoints and transcribed presentation recordings (see the "Next step" section there) — the blog corpus is small and pre-dates the current expertise.
 - WordPress: confirm REST API access and application-password setup on schalken.net.
 - Image generation: which service/model, and how the image module integrates with the UI.
 - LinkedIn: API automation feasibility vs. copy-paste teasers.
