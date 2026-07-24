@@ -1,0 +1,14 @@
+title: ""
+slug: ""
+type: blog            # blog | professional
+status: ideation      # ideation | writing | finalising | published | deprecated
+created: ""           # YYYY-MM-DD
+published:
+  url: ""
+  date: ""
+  state: ""           # relevant | outdated | passed-by
+versions:
+  main: post.md       # named versions live in versions/<name>.md
+tags: []
+references: []        # tracked URLs for the monitoring phase
+definition_of_done: ""

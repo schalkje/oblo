@@ -1,0 +1,25 @@
+title: "Spark Delta Pipelines"
+slug: "spark-delta-pipelines"
+type: blog            # blog | professional
+status: ideation      # ideation | writing | finalising | published | deprecated
+created: "2026-07-23"
+published:
+  url: ""
+  date: ""
+  state: ""           # relevant | outdated | passed-by
+versions:
+  main: post.md       # named versions live in versions/<name>.md
+tags: [databricks, sdp, dataengineering]
+references:            # tracked URLs for the monitoring phase (Databricks moves fast)
+  - https://learn.microsoft.com/en-us/azure/databricks/ldp/                                    # product landing + naming
+  - https://learn.microsoft.com/en-us/azure/databricks/ldp/concepts/                           # declarative model, 3 dataset types, when-to-use-what
+  - https://learn.microsoft.com/en-us/azure/databricks/ldp/developer/sql-dev                   # core SQL: CREATE STREAMING TABLE / MATERIALIZED VIEW, STREAM, read_files
+  - https://learn.microsoft.com/en-us/azure/databricks/ldp/developer/ldp-sql-ref-create-streaming-table  # ST grammar: comments, TBLPROPERTIES, expectations, flows, limitations
+  - https://learn.microsoft.com/en-us/azure/databricks/ldp/expectations                        # warn/drop/fail syntax + behaviour
+  - https://learn.microsoft.com/en-us/azure/databricks/ldp/flows-backfill                      # backloading via INSERT INTO ONCE flow
+  - https://learn.microsoft.com/en-us/azure/databricks/ldp/incremental-refresh                 # the "big bad": serverless-only incremental MV refresh
+  - https://learn.microsoft.com/en-us/azure/databricks/ldp/concepts/spark-declarative-pipelines # SDP-vs-Lakeflow difference table (footnote)
+  - https://learn.microsoft.com/en-us/azure/databricks/ldp/limitations                          # problems/disadvantages: defined-once, pivot, time-travel, limits
+  - https://learn.microsoft.com/en-us/azure/databricks/ldp/multi-file-editor                    # code organization: transformations/ layout, deps by name across files
+  - https://learn.microsoft.com/en-us/azure/databricks/release-notes/dlt/2026                   # preview/coming features sweep (volatile - monitor)
+definition_of_done: "Opens with a short, generic 'glue code we've all written' imperative-pipeline hook (shared pain, not the author's own project), no naming history; explains the declarative model (declare tables in SQL, engine derives DAG, order, incremental state); covers streaming table vs. materialized view vs. plain view with SQL examples and when to use what; shows table properties/descriptions, data-quality expectations (warn/drop/fail), and backloading; covers pipeline code organization (multiple files vs together, recommended transformations/ layout, dependencies resolved by name across files); gives an honest problems/disadvantages 'when NOT to use this' read (serverless-only MV incremental refresh, streaming-table lock-down, full-refresh data-loss risk, one-pipeline-owns-the-table); notes relevant preview/coming features in a short dated box; grounded in one finance PoC (clients/payments/investments-or-loans, 2-3 steps, SQL split one file per medallion layer) the author runs on Databricks that generates its own data AND updates so incremental changes are demoed, with real SQL and a DAG screenshot; names at least one gotcha/'big bad'; open-source SDP only as a footnote where it differs; scannable wrestling-post register with a pragmatic close or open question."
