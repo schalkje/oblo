@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "5"
+# ///
 # MAGIC %md
 # MAGIC # Finance PoC — source data generator
 # MAGIC
@@ -21,11 +25,25 @@
 
 # COMMAND ----------
 
-dbutils.widgets.text("catalog", "main", "Target catalog")
+available_catalogs = [r.catalog for r in spark.sql("SHOW CATALOGS").collect()]
+uc_catalogs = [c for c in available_catalogs if c not in {"hive_metastore", "samples", "system"}]
+
+if not uc_catalogs:
+    raise RuntimeError("No Unity Catalog catalog is available. This notebook writes to /Volumes, which requires Unity Catalog.")
+
+default_catalog = uc_catalogs[0]
+
+dbutils.widgets.text("catalog", default_catalog, "Target catalog")
 dbutils.widgets.text("schema", "finance_poc", "Target schema")
 dbutils.widgets.text("volume", "landing", "Volume name")
 
-CATALOG = dbutils.widgets.get("catalog")
+CATALOG = dbutils.widgets.get("catalog").strip()
+if CATALOG not in uc_catalogs:
+    CATALOG = default_catalog
+    dbutils.widgets.remove("catalog")
+    dbutils.widgets.text("catalog", CATALOG, "Target catalog")
+    print(f"Catalog widget reset to available Unity Catalog catalog: {CATALOG}")
+
 SCHEMA = dbutils.widgets.get("schema")
 VOLUME = dbutils.widgets.get("volume")
 
@@ -43,12 +61,11 @@ print("Writing source files under:", BASE)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## One-time setup: create the catalog / schema / volume
-# MAGIC Comment these out if they already exist. Requires privileges to create them.
+# MAGIC ## One-time setup: create the schema / volume
+# MAGIC Uses the selected Unity Catalog catalog from the widget above. Comment these out if they already exist. Requires privileges to create them.
 
 # COMMAND ----------
 
-spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG}")
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA}")
 spark.sql(f"CREATE VOLUME IF NOT EXISTS {CATALOG}.{SCHEMA}.{VOLUME}")
 
@@ -90,6 +107,10 @@ def write_jsonl(directory, filename, records):
 # MAGIC   - a payment of 5,000,000            → **warned** (kept, flagged) by the warn expectation.
 
 # COMMAND ----------
+
+# Ensure directories exist before writing
+for d in (CLIENTS_DIR, LOANS_DIR, PAY_INCOMING, PAY_HISTORY):
+    dbutils.fs.mkdirs(d)
 
 # ---- clients (note the duplicate C001) ----
 clients = [
